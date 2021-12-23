@@ -1,5 +1,5 @@
 {
-	"name": "pipeline2",
+	"name": "pipeline1_copy1",
 	"properties": {
 		"activities": [
 			{
@@ -13,7 +13,7 @@
 				}
 			},
 			{
-				"name": "Set variable2",
+				"name": "Set variable1_copy1",
 				"type": "SetVariable",
 				"dependsOn": [
 					{
