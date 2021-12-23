@@ -1,0 +1,9 @@
+{
+	"name": "adf-formacion-mcs",
+	"location": "westeurope",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "695674e9-9a93-49ef-9fb3-fd1ee2555387",
+		"tenantId": "e611efa0-a5c1-4636-80fd-a7ec5ab0c3d4"
+	}
+}
