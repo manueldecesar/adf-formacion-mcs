@@ -9,6 +9,12 @@
 				"userProperties": []
 			}
 		],
+		"variables": {
+			"v": {
+				"type": "String",
+				"defaultValue": "0"
+			}
+		},
 		"annotations": []
 	}
 }
