@@ -13,6 +13,38 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Set variable1",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var1",
+							"value": "2"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"var1": {
+						"type": "String",
+						"defaultValue": "1"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2021-12-23T19:26:42Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipeline2')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -57,7 +89,7 @@
 					}
 				},
 				"annotations": [],
-				"lastPublishTime": "2021-12-23T18:47:48Z"
+				"lastPublishTime": "2021-12-23T19:26:42Z"
 			},
 			"dependsOn": []
 		},
@@ -106,7 +138,7 @@
 					}
 				},
 				"annotations": [],
-				"lastPublishTime": "2021-12-23T18:36:09Z"
+				"lastPublishTime": "2021-12-23T19:26:42Z"
 			},
 			"dependsOn": []
 		},
@@ -155,39 +187,7 @@
 					}
 				},
 				"annotations": [],
-				"lastPublishTime": "2021-12-23T18:36:09Z"
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Set variable1",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "var1",
-							"value": "2"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"var1": {
-						"type": "String",
-						"defaultValue": "1"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2021-12-23T19:10:53Z"
+				"lastPublishTime": "2022-01-03T11:42:19Z"
 			},
 			"dependsOn": []
 		},
@@ -272,7 +272,8 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"annotations": []
+				"annotations": [],
+				"lastPublishTime": "2022-01-03T12:53:05Z"
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/pipeline1')]",
@@ -303,8 +304,7 @@
 						"frequency": "Day",
 						"interval": 1,
 						"startTime": "2022-01-04T08:00:00",
-						"timeZone": "Romance Standard Time",
-						"schedule": {}
+						"timeZone": "Romance Standard Time"
 					}
 				}
 			},
