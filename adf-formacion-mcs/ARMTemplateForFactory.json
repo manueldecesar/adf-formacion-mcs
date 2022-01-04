@@ -6,6 +6,10 @@
 			"type": "string",
 			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-formacion-mcs"
+		},
+		"bd_formacion_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
 		}
 	},
 	"variables": {
@@ -87,6 +91,20 @@
 							"waitOnCompletion": true,
 							"parameters": {}
 						}
+					},
+					{
+						"name": "prueba_carga",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "prueba_carga",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -100,7 +118,8 @@
 				"[concat(variables('factoryId'), '/pipelines/pipeline1')]",
 				"[concat(variables('factoryId'), '/pipelines/pipeline2')]",
 				"[concat(variables('factoryId'), '/pipelines/pipeline3')]",
-				"[concat(variables('factoryId'), '/pipelines/pipeline4')]"
+				"[concat(variables('factoryId'), '/pipelines/pipeline4')]",
+				"[concat(variables('factoryId'), '/pipelines/prueba_carga')]"
 			]
 		},
 		{
@@ -310,6 +329,152 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/pipelines/carga_diaria')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/bd_formacion')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('bd_formacion_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/prueba_origen')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "bd_formacion",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "campo_a",
+						"type": "varchar"
+					},
+					{
+						"name": "campo_b",
+						"type": "varchar"
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "prueba_origen"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/bd_formacion')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/prueba_carga')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "bd_formacion",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "prueba_carga"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/bd_formacion')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/prueba_carga')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "copia_prueba",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"additionalColumns": [
+									{
+										"name": "canalizacion_adf",
+										"value": {
+											"value": "@pipeline().Pipeline",
+											"type": "Expression"
+										}
+									},
+									{
+										"name": "fecha_insert",
+										"value": {
+											"value": "@convertFromUtc(utcnow(),'Romance Standard Time')",
+											"type": "Expression"
+										}
+									}
+								],
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"sink": {
+								"type": "AzureSqlSink",
+								"tableOption": "autoCreate",
+								"disableMetricsCollection": false
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "prueba_origen",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "prueba_carga",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/prueba_origen')]",
+				"[concat(variables('factoryId'), '/datasets/prueba_carga')]"
 			]
 		}
 	]

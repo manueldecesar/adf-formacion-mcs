@@ -4,6 +4,9 @@
 	"parameters": {
 		"factoryName": {
 			"value": "adf-formacion-mcs"
+		},
+		"bd_formacion_connectionString": {
+			"value": ""
 		}
 	}
 }

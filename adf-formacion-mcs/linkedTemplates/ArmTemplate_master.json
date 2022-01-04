@@ -7,6 +7,10 @@
 			"metadata": "Nombre de instancia de Data Factory",
 			"defaultValue": "adf-formacion-mcs"
 		},
+		"bd_formacion_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI de la cuenta de almacenamiento que contiene las plantillas de ARM vinculadas."
@@ -33,6 +37,9 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
+					},
+					"bd_formacion_connectionString": {
+						"value": "[parameters('bd_formacion_connectionString')]"
 					}
 				}
 			},
