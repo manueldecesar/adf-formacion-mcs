@@ -1,0 +1,25 @@
+{
+	"name": "prueba_origen",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bd_formacion",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "campo_a",
+				"type": "varchar"
+			},
+			{
+				"name": "campo_b",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "prueba_origen"
+		}
+	}
+}
