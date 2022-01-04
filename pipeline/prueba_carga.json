@@ -38,6 +38,10 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": {
+							"value": "if exists (select 1 from sys.tables t  where schema_name(t.schema_id)='dbo' and t.name ='prueba_carga') truncate table dbo.prueba_carga",
+							"type": "Expression"
+						},
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
