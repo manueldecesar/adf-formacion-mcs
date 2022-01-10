@@ -1,0 +1,16 @@
+{
+	"name": "prueba_carga_fd",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bd_formacion",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "prueba_carga_fd"
+		}
+	}
+}
