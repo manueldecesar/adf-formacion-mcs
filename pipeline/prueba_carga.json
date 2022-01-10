@@ -93,7 +93,10 @@
 						"referenceName": "dataflow1",
 						"type": "DataFlowReference",
 						"parameters": {
-							"canalizacion_adf": "'prueba'"
+							"canalizacion_adf": {
+								"value": "'@{pipeline().Pipeline}'",
+								"type": "Expression"
+							}
 						}
 					},
 					"compute": {
