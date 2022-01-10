@@ -5,10 +5,6 @@
 		"typeProperties": {
 			"sources": [
 				{
-					"dataset": {
-						"referenceName": "prueba_carga",
-						"type": "DatasetReference"
-					},
 					"name": "source1"
 				}
 			],
@@ -27,9 +23,12 @@
 				},
 				{
 					"name": "Modificarfila1"
+				},
+				{
+					"name": "Seleccionar1"
 				}
 			],
-			"script": "parameters{\n\tcanalizacion_adf as string ('prueba')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nModificarfila1 derive(canalizacion_adf = $canalizacion_adf,\n\t\tfecha_upsert = fromUTC(currentUTC(),'Europe/Madrid')) ~> Columnaderivada1\nsource1 alterRow(upsertIf(true())) ~> Modificarfila1\nColumnaderivada1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:(['campo_a']),\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+			"script": "parameters{\n\tcanalizacion_adf as string ('prueba')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false) ~> source1\nModificarfila1 derive(canalizacion_adf = $canalizacion_adf,\n\t\tfecha_upsert = fromUTC(currentUTC(),'Europe/Madrid')) ~> Columnaderivada1\nSeleccionar1 alterRow(upsertIf(true())) ~> Modificarfila1\nsource1 select(mapColumn(\n\t\teach(match(name!='fecha_insert'))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:(['campo_a']),\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
 		}
 	}
 }
