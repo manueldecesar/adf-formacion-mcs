@@ -1,0 +1,16 @@
+{
+	"name": "csv_bdsql",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "bd_formacion",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "csv_bdsql"
+		}
+	}
+}

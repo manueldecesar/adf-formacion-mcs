@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "copia_prueba_parquet_csv",
+				"name": "copia_prueba_datalake_bd",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
@@ -16,12 +16,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"source": {
-						"type": "ParquetSource",
+						"type": "DelimitedTextSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
-							"wildcardFileName": "dbo.prueba_carga_fd.parquet",
 							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
 						}
 					},
 					"sink": {
@@ -49,7 +51,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "Parquet1",
+						"referenceName": "prueba_csv_2",
 						"type": "DatasetReference"
 					}
 				],
