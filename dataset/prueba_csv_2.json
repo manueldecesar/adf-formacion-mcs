@@ -11,7 +11,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"fileName": "parquet_csv.csv",
-				"folderPath": " pruebas",
+				"folderPath": " pruebas/parquet_csv",
 				"fileSystem": "contenedor-mcs"
 			},
 			"columnDelimiter": ";",

@@ -109,14 +109,7 @@
 			{
 				"name": "copia_prueba_parquet_csv",
 				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "copia_prueba_parquet",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -131,6 +124,7 @@
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
 							"recursive": true,
+							"wildcardFileName": "dbo.prueba_carga_fd.parquet",
 							"enablePartitionDiscovery": false
 						}
 					},
