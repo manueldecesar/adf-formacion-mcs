@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "copia_prueba_parquet",
+				"name": "copia_dbsql_azureTable",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
