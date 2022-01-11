@@ -80,6 +80,19 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "prueba_carga_data_lake",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "prueba_carga_data_lake",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": [],
