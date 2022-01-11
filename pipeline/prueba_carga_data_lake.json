@@ -58,7 +58,7 @@
 				},
 				"inputs": [
 					{
-						"referenceName": "prueba_origen",
+						"referenceName": "prueba_carga_fd",
 						"type": "DatasetReference"
 					}
 				],
