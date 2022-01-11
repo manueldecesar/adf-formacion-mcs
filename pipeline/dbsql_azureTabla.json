@@ -30,7 +30,7 @@
 						"type": "AzureTableSink",
 						"azureTableInsertType": "replace",
 						"azureTableRowKeyName": {
-							"value": "campo_a",
+							"value": "clave",
 							"type": "Expression"
 						},
 						"writeBatchSize": 10000
