@@ -105,6 +105,26 @@
 						"type": "DatasetReference"
 					}
 				]
+			},
+			{
+				"name": "parquet_csv",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "copia_prueba_parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "parquet_csv",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": []
