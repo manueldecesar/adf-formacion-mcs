@@ -28,6 +28,7 @@
 					},
 					"sink": {
 						"type": "AzureSqlSink",
+						"preCopyScript": "if exists (select 1 from sys.tables t  where schema_name(t.schema_id)='dbo' and t.name ='csv_bdsql') truncate table dbo.csv_bdsql",
 						"tableOption": "autoCreate",
 						"disableMetricsCollection": false
 					},
