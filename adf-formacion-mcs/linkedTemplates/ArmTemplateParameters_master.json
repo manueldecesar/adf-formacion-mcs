@@ -5,8 +5,14 @@
 		"factoryName": {
 			"value": "adf-formacion-mcs"
 		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
 		"bd_formacion_connectionString": {
 			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://almacenamiento0mcs.dfs.core.windows.net"
 		},
 		"containerUri": {
 			"value": ""
