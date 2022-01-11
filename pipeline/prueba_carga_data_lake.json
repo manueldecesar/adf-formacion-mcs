@@ -17,22 +17,6 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
-						"additionalColumns": [
-							{
-								"name": "canalizacion_adf",
-								"value": {
-									"value": "@pipeline().Pipeline",
-									"type": "Expression"
-								}
-							},
-							{
-								"name": "fecha_insert",
-								"value": {
-									"value": "@convertFromUtc(utcnow(),'Romance Standard Time')",
-									"type": "Expression"
-								}
-							}
-						],
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
