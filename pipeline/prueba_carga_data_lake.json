@@ -37,13 +37,13 @@
 						"partitionOption": "None"
 					},
 					"sink": {
-						"type": "AzureSqlSink",
-						"preCopyScript": {
-							"value": "if exists (select 1 from sys.tables t  where schema_name(t.schema_id)='dbo' and t.name ='prueba_carga') truncate table dbo.prueba_carga",
-							"type": "Expression"
+						"type": "ParquetSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
 						},
-						"tableOption": "autoCreate",
-						"disableMetricsCollection": false
+						"formatSettings": {
+							"type": "ParquetWriteSettings"
+						}
 					},
 					"enableStaging": false,
 					"dataIntegrationUnits": 2,
@@ -64,7 +64,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "prueba_carga",
+						"referenceName": "Parquet1",
 						"type": "DatasetReference"
 					}
 				]
