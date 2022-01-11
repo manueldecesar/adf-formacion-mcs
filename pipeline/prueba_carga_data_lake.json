@@ -145,6 +145,19 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "dbsql_azureTabla",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "dbsql_azureTabla",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": []
