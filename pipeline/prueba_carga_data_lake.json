@@ -109,7 +109,14 @@
 			{
 				"name": "copia_prueba_parquet_csv",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "copia_prueba_parquet",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "7.00:00:00",
 					"retry": 0,
@@ -123,15 +130,15 @@
 						"type": "ParquetSource",
 						"storeSettings": {
 							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"wildcardFileName": "dbo.prueba_carga_fd.parquet",
+							"fileListPath": "contenedor-mcs/dbo.prueba_carga_fd.parquet",
 							"enablePartitionDiscovery": false
 						}
 					},
 					"sink": {
 						"type": "DelimitedTextSink",
 						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings"
+							"type": "AzureBlobFSWriteSettings",
+							"copyBehavior": "MergeFiles"
 						},
 						"formatSettings": {
 							"type": "DelimitedTextWriteSettings",
