@@ -10,7 +10,6 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "parquet1.parquet",
 				"fileSystem": "contenedor-mcs"
 			},
 			"compressionCodec": "snappy"
