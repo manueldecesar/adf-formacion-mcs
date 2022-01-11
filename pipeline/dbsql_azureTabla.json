@@ -17,12 +17,18 @@
 				"typeProperties": {
 					"source": {
 						"type": "AzureSqlSource",
+						"additionalColumns": [
+							{
+								"name": "clave",
+								"value": "$$COLUMN:campo_a"
+							}
+						],
 						"queryTimeout": "02:00:00",
 						"partitionOption": "None"
 					},
 					"sink": {
 						"type": "AzureTableSink",
-						"azureTableInsertType": "merge",
+						"azureTableInsertType": "replace",
 						"azureTableRowKeyName": {
 							"value": "campo_a",
 							"type": "Expression"
