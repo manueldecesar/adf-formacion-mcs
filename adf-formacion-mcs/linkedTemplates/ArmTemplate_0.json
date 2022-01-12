@@ -11,17 +11,25 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"accountKey\"de \"AzureDataLakeStorage1\""
 		},
-		"bd_formacion_connectionString": {
-			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
-		},
 		"AzureTableStorage1_connectionString": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureTableStorage1\""
 		},
+		"bd_formacion_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
+		},
+		"AzureFunction1_functionKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"functionKey\"de \"AzureFunction1\""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://almacenamiento0mcs.dfs.core.windows.net"
+		},
+		"AzureFunction1_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://azf-mcs.azurewebsites.net"
 		}
 	},
 	"variables": {
@@ -225,6 +233,19 @@
 			"dependsOn": []
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/AzureTableStorage1')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureTableStorage",
+				"typeProperties": {
+					"connectionString": "[parameters('AzureTableStorage1_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/bd_formacion')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -238,17 +259,42 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/AzureTableStorage1')]",
+			"name": "[concat(parameters('factoryName'), '/AzureFunction1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"type": "AzureTableStorage",
+				"type": "AzureFunction",
 				"typeProperties": {
-					"connectionString": "[parameters('AzureTableStorage1_connectionString')]"
+					"functionAppUrl": "[parameters('AzureFunction1_properties_typeProperties_functionAppUrl')]",
+					"functionKey": {
+						"type": "SecureString",
+						"value": "[parameters('AzureFunction1_functionKey')]"
+					},
+					"authentication": "Anonymous"
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/AzureTable1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureTableStorage1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureTable",
+				"schema": [],
+				"typeProperties": {
+					"tableName": "prueba"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
@@ -301,6 +347,27 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeStorage1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/csv_bdsql')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "bd_formacion",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "csv_bdsql"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/bd_formacion')]"
 			]
 		},
 		{
@@ -402,169 +469,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/bd_formacion')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/csv_bdsql')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "bd_formacion",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "csv_bdsql"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/bd_formacion')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/AzureTable1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureTableStorage1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureTable",
-				"schema": [],
-				"typeProperties": {
-					"tableName": "prueba"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureTableStorage1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
-			"type": "Microsoft.DataFactory/factories/dataflows",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"type": "MappingDataFlow",
-				"typeProperties": {
-					"sources": [
-						{
-							"dataset": {
-								"referenceName": "prueba_carga",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
-						}
-					],
-					"sinks": [
-						{
-							"dataset": {
-								"referenceName": "prueba_carga_fd",
-								"type": "DatasetReference"
-							},
-							"name": "sink1"
-						}
-					],
-					"transformations": [
-						{
-							"name": "Columnaderivada1"
-						},
-						{
-							"name": "Modificarfila1"
-						},
-						{
-							"name": "Seleccionar1"
-						}
-					],
-					"script": "parameters{\n\tcanalizacion_adf as string ('prueba')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nModificarfila1 derive(canalizacion_adf = $canalizacion_adf,\n\t\tfecha_upsert = fromUTC(currentUTC(),'Europe/Madrid')) ~> Columnaderivada1\nSeleccionar1 alterRow(upsertIf(true())) ~> Modificarfila1\nsource1 select(mapColumn(\n\t\teach(match(name!='fecha_insert'))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:(['campo_a']),\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/prueba_carga')]",
-				"[concat(variables('factoryId'), '/datasets/prueba_carga_fd')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/parquet_csv')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "copia_prueba_parquet_csv",
-						"type": "Copy",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"source": {
-								"type": "ParquetSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"wildcardFileName": "dbo.prueba_carga_fd.parquet",
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings",
-									"copyBehavior": "MergeFiles"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"dataIntegrationUnits": 2,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "Parquet1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						],
-						"outputs": [
-							{
-								"referenceName": "prueba_csv_2",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/Parquet1')]",
-				"[concat(variables('factoryId'), '/datasets/prueba_csv_2')]"
 			]
 		},
 		{
@@ -719,13 +623,13 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/prueba_carga')]",
+			"name": "[concat(parameters('factoryName'), '/parquet_csv')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "copia_prueba",
+						"name": "copia_prueba_parquet_csv",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -738,34 +642,25 @@
 						"userProperties": [],
 						"typeProperties": {
 							"source": {
-								"type": "AzureSqlSource",
-								"additionalColumns": [
-									{
-										"name": "canalizacion_adf",
-										"value": {
-											"value": "@pipeline().Pipeline",
-											"type": "Expression"
-										}
-									},
-									{
-										"name": "fecha_insert",
-										"value": {
-											"value": "@convertFromUtc(utcnow(),'Romance Standard Time')",
-											"type": "Expression"
-										}
-									}
-								],
-								"queryTimeout": "02:00:00",
-								"partitionOption": "None"
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "dbo.prueba_carga_fd.parquet",
+									"enablePartitionDiscovery": false
+								}
 							},
 							"sink": {
-								"type": "AzureSqlSink",
-								"preCopyScript": {
-									"value": "if exists (select 1 from sys.tables t  where schema_name(t.schema_id)='dbo' and t.name ='prueba_carga') truncate table dbo.prueba_carga",
-									"type": "Expression"
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
 								},
-								"tableOption": "autoCreate",
-								"disableMetricsCollection": false
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
 							},
 							"enableStaging": false,
 							"dataIntegrationUnits": 2,
@@ -780,60 +675,18 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "prueba_origen",
+								"referenceName": "Parquet1",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "prueba_carga",
+								"referenceName": "prueba_csv_2",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						]
-					},
-					{
-						"name": "dataflow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [
-							{
-								"activity": "copia_prueba",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "1.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "dataflow1",
-								"type": "DataFlowReference",
-								"parameters": {
-									"canalizacion_adf": {
-										"value": "'@{pipeline().Pipeline}'",
-										"type": "Expression"
-									}
-								},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
 					}
 				],
 				"policy": {
@@ -843,9 +696,52 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/prueba_origen')]",
+				"[concat(variables('factoryId'), '/datasets/Parquet1')]",
+				"[concat(variables('factoryId'), '/datasets/prueba_csv_2')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "prueba_carga",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "prueba_carga_fd",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Seleccionar1"
+						}
+					],
+					"script": "parameters{\n\tcanalizacion_adf as string ('prueba')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nModificarfila1 derive(canalizacion_adf = $canalizacion_adf,\n\t\tfecha_upsert = fromUTC(currentUTC(),'Europe/Madrid')) ~> Columnaderivada1\nSeleccionar1 alterRow(upsertIf(true())) ~> Modificarfila1\nsource1 select(mapColumn(\n\t\teach(match(name!='fecha_insert'))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:(['campo_a']),\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/prueba_carga')]",
-				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+				"[concat(variables('factoryId'), '/datasets/prueba_carga_fd')]"
 			]
 		}
 	]

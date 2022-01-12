@@ -8,14 +8,20 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureTableStorage1_connectionString": {
+			"value": ""
+		},
 		"bd_formacion_connectionString": {
 			"value": ""
 		},
-		"AzureTableStorage1_connectionString": {
+		"AzureFunction1_functionKey": {
 			"value": ""
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"value": "https://almacenamiento0mcs.dfs.core.windows.net"
+		},
+		"AzureFunction1_properties_typeProperties_functionAppUrl": {
+			"value": "https://azf-mcs.azurewebsites.net"
 		},
 		"containerUri": {
 			"value": ""

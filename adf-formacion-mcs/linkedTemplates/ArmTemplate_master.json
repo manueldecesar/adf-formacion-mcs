@@ -11,17 +11,25 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"accountKey\"de \"AzureDataLakeStorage1\""
 		},
-		"bd_formacion_connectionString": {
-			"type": "secureString",
-			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
-		},
 		"AzureTableStorage1_connectionString": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureTableStorage1\""
 		},
+		"bd_formacion_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
+		},
+		"AzureFunction1_functionKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"functionKey\"de \"AzureFunction1\""
+		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://almacenamiento0mcs.dfs.core.windows.net"
+		},
+		"AzureFunction1_properties_typeProperties_functionAppUrl": {
+			"type": "string",
+			"defaultValue": "https://azf-mcs.azurewebsites.net"
 		},
 		"containerUri": {
 			"type": "string",
@@ -53,14 +61,20 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
-					"bd_formacion_connectionString": {
-						"value": "[parameters('bd_formacion_connectionString')]"
-					},
 					"AzureTableStorage1_connectionString": {
 						"value": "[parameters('AzureTableStorage1_connectionString')]"
 					},
+					"bd_formacion_connectionString": {
+						"value": "[parameters('bd_formacion_connectionString')]"
+					},
+					"AzureFunction1_functionKey": {
+						"value": "[parameters('AzureFunction1_functionKey')]"
+					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
+					},
+					"AzureFunction1_properties_typeProperties_functionAppUrl": {
+						"value": "[parameters('AzureFunction1_properties_typeProperties_functionAppUrl')]"
 					}
 				}
 			},
