@@ -100,6 +100,19 @@
 					},
 					"waitOnCompletion": true
 				}
+			},
+			{
+				"name": "prueba_databricks",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "prueba_databricks",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"annotations": [],
