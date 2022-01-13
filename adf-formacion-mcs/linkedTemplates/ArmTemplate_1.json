@@ -13,6 +13,122 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/parquet_csv')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "copia_prueba_parquet_csv",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "ParquetSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"wildcardFileName": "dbo.prueba_carga_fd.parquet",
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings",
+									"copyBehavior": "MergeFiles"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"dataIntegrationUnits": 2,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "Parquet1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "prueba_csv_2",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/dataflow1')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "prueba_carga",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "prueba_carga_fd",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "Columnaderivada1"
+						},
+						{
+							"name": "Modificarfila1"
+						},
+						{
+							"name": "Seleccionar1"
+						}
+					],
+					"script": "parameters{\n\tcanalizacion_adf as string ('prueba')\n}\nsource(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tisolationLevel: 'READ_UNCOMMITTED',\n\tformat: 'table') ~> source1\nModificarfila1 derive(canalizacion_adf = $canalizacion_adf,\n\t\tfecha_upsert = fromUTC(currentUTC(),'Europe/Madrid')) ~> Columnaderivada1\nSeleccionar1 alterRow(upsertIf(true())) ~> Modificarfila1\nsource1 select(mapColumn(\n\t\teach(match(name!='fecha_insert'))\n\t),\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> Seleccionar1\nColumnaderivada1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tdeletable:false,\n\tinsertable:false,\n\tupdateable:false,\n\tupsertable:true,\n\tkeys:(['campo_a']),\n\tformat: 'table',\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true,\n\terrorHandlingOption: 'stopOnFirstError') ~> sink1"
+				}
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/prueba_carga')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -136,7 +252,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/prueba_carga_data_lake')]",
@@ -315,7 +433,9 @@
 				},
 				"annotations": []
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/parquet_csv')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/carga_diaria')]",
@@ -422,6 +542,20 @@
 						"typeProperties": {
 							"pipeline": {
 								"referenceName": "prueba_carga_data_lake",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
+					},
+					{
+						"name": "prueba_databricks",
+						"type": "ExecutePipeline",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "prueba_databricks",
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,

@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"accountKey\"de \"AzureDataLakeStorage1\""
 		},
+		"AzureFunction1_functionKey": {
+			"type": "secureString",
+			"metadata": "Cadena protegida para \"functionKey\"de \"AzureFunction1\""
+		},
 		"AzureTableStorage1_connectionString": {
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"AzureTableStorage1\""
@@ -19,9 +23,9 @@
 			"type": "secureString",
 			"metadata": "Cadena protegida para \"connectionString\"de \"bd_formacion\""
 		},
-		"AzureFunction1_functionKey": {
+		"AzureDatabricks1_accessToken": {
 			"type": "secureString",
-			"metadata": "Cadena protegida para \"functionKey\"de \"AzureFunction1\""
+			"metadata": "Cadena protegida para \"accessToken\"de \"AzureDatabricks1\""
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
 			"type": "string",
@@ -61,14 +65,17 @@
 					"AzureDataLakeStorage1_accountKey": {
 						"value": "[parameters('AzureDataLakeStorage1_accountKey')]"
 					},
+					"AzureFunction1_functionKey": {
+						"value": "[parameters('AzureFunction1_functionKey')]"
+					},
 					"AzureTableStorage1_connectionString": {
 						"value": "[parameters('AzureTableStorage1_connectionString')]"
 					},
 					"bd_formacion_connectionString": {
 						"value": "[parameters('bd_formacion_connectionString')]"
 					},
-					"AzureFunction1_functionKey": {
-						"value": "[parameters('AzureFunction1_functionKey')]"
+					"AzureDatabricks1_accessToken": {
+						"value": "[parameters('AzureDatabricks1_accessToken')]"
 					},
 					"AzureDataLakeStorage1_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage1_properties_typeProperties_url')]"
