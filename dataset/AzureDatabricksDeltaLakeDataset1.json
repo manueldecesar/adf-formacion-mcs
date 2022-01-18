@@ -1,0 +1,61 @@
+{
+	"name": "AzureDatabricksDeltaLakeDataset1",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureDatabricksDeltaLake1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureDatabricksDeltaLakeDataset",
+		"typeProperties": {
+			"database": "default",
+			"table": "diamonds"
+		},
+		"schema": [
+			{
+				"name": "_c0",
+				"type": "integer"
+			},
+			{
+				"name": "carat",
+				"type": "double"
+			},
+			{
+				"name": "cut",
+				"type": "string"
+			},
+			{
+				"name": "color",
+				"type": "string"
+			},
+			{
+				"name": "clarity",
+				"type": "string"
+			},
+			{
+				"name": "depth",
+				"type": "double"
+			},
+			{
+				"name": "table",
+				"type": "double"
+			},
+			{
+				"name": "price",
+				"type": "integer"
+			},
+			{
+				"name": "x",
+				"type": "double"
+			},
+			{
+				"name": "y",
+				"type": "double"
+			},
+			{
+				"name": "z",
+				"type": "double"
+			}
+		]
+	}
+}
