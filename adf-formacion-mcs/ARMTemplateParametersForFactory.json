@@ -8,6 +8,9 @@
 		"AzureDataLakeStorage1_accountKey": {
 			"value": ""
 		},
+		"AzureDatabricks1_accessToken": {
+			"value": ""
+		},
 		"AzureFunction1_functionKey": {
 			"value": ""
 		},
@@ -17,7 +20,7 @@
 		"bd_formacion_connectionString": {
 			"value": ""
 		},
-		"AzureDatabricks1_accessToken": {
+		"AzureDatabricksDeltaLake1_accessToken": {
 			"value": ""
 		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
